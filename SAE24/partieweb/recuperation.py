@@ -8,3 +8,5 @@ while True:
         for file in os.listdir(repertoire):
             with open(os.path.join(repertoire, file), 'r') as f:
                 data = json.load(f)
+            ajoutdonnees(data)
+            os.remove(os.path.join(repertoire, file))
