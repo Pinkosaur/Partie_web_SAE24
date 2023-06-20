@@ -5,14 +5,15 @@
     <title>Capteurs</title>
 </head>
 <body>
+<a href="/partieweb/ajout/">Ajouter un capteur</a>
 <ul>
     {% if liste %}
         {% for l in liste %}
-        <li> joueur {{l.id}} : {{l.prenomJoueur}} {{l.nomJoueur}}<br>---------------
-        <a href="/partieweb/affiche/{{l.id}}/">Afficher</a>
-        <a href="/partieweb/update/{{l.id}}/">Mettre à jour</a>
-        <a href="/partieweb/delete/{{l.id}}/">Supprimer</a>
-        <a href="/partieweb/">Favoris de {{l.prenomJoueur}} {{l.nomJoueur}}</a>
+        <li>{{l}}
+        <a href="/partieweb/affiche/{{l.id}}/">Afficher</a> -
+        <a href="/partieweb/update/{{l.id}}/">Mettre à jour</a> -
+        <a href="/partieweb/delete/{{l.id}}/">Supprimer</a> -
+        <a href="/partieweb/donnees/{{l.id}}/">Données du capteur</a>
         </li>
         {% endfor %}
     {% else %}

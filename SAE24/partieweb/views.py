@@ -28,7 +28,7 @@ def affiche(request, id):
 def update(request, id):
     capteur = models.capteur.objects.get(pk=id)
     form = capteurform(capteur.dic())
-    return render(request, "partieweb/ajoutupdate.html", {"form":form, "id":id})
+    return render(request, "partieweb/update.html", {"form":form, "id":id})
 
 def updatetraitement(request, id):
     form = capteurform(request.POST)
@@ -39,12 +39,22 @@ def updatetraitement(request, id):
         capteur.save()
         return HttpResponseRedirect("/partieweb/")
     else:
-        return render(request, "partieweb/ajoutupdate.html", {"form": form})
+        return render(request, "partieweb/update.html", {"form": form})
 
 def delete(request, id):
     suppr = models.capteur.objects.get(pk=id)
     suppr.delete()
-    return HttpResponseRedirect("/ludotheque/")
+    return HttpResponseRedirect("/partieweb/")
+
+def donnees(request, id):
+    liste = models.donnees.objects.filter(capteur_id=id)
+    return render(request, "partieweb/donnees.html", {"liste": liste})
+
+def deletedonnee(request, id):
+    suppr = models.donnees.objects.get(pk=id)
+    idcapteur = suppr.capteur_id
+    suppr.delete()
+    HttpResponseRedirect(f"/partieweb/donnees/{idcapteur}/")
 
 def ajoutdonnees(data):
     data = data.split(',')
@@ -56,6 +66,6 @@ def ajoutdonnees(data):
     if models.capteur.objects.filter(piece=piece).exists():
         capteur = models.capteur.objects.get(piece=piece)
     else:
-        capteur = models.capteur.objects.create(nom='Nouveau capteur', piece=piece, emplacement='Inconnu')
-    donnees = models.donnees.objects.create(id=id, capteur=capteur, piece=piece, date=date, heure=heure, temp=temp)
+        capteur = models.capteur.objects.create(id=id, nom='Nouveau capteur', piece=piece, emplacement='Inconnu')
+    donnees = models.donnees.objects.create(capteur=capteur, piece=piece, date=date, heure=heure, temp=temp)
     return "ok"
