@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from .forms import capteurform
-from . import models, recuperation
+from . import models
 from django.http import HttpResponseRedirect
 # Create your views here.
 
@@ -54,18 +54,17 @@ def deletedonnee(request, id):
     suppr = models.donnees.objects.get(pk=id)
     idcapteur = suppr.capteur_id
     suppr.delete()
-    HttpResponseRedirect(f"/partieweb/donnees/{idcapteur}/")
+    liste = models.donnees.objects.filter(capteur_id=idcapteur)
+    return render(request, "partieweb/donnees.html", {"liste": liste})
 
-def ajoutdonnees(data):
-    data = data.split(',')
-    id = data[0].split('=')[1]
-    piece = data[1].split('=')[1]
-    date = data[2].split('=')[1]
-    heure = data[3].split('=')[1]
-    temp = data[4].split('=')[1]
-    if models.capteur.objects.filter(piece=piece).exists():
-        capteur = models.capteur.objects.get(piece=piece)
+def ajoutdonnees(data): # id, piece, date, heure, temp
+    date = data[2].split("/")
+    date = f"{date[2]}-{date[1]}-{date[0]}"
+    heure =  data[3].split("-")
+    heure = f"{heure[0]}:{heure[1]}:{heure[2]}"
+    if models.capteur.objects.filter(pk=data[0]).exists():
+        capteur = models.capteur.objects.get(pk=data[0])
     else:
-        capteur = models.capteur.objects.create(id=id, nom='Nouveau capteur', piece=piece, emplacement='Inconnu')
-    donnees = models.donnees.objects.create(capteur=capteur, piece=piece, date=date, heure=heure, temp=temp)
+        capteur = models.capteur.objects.create(id=data[0], nom='Nouveau capteur', piece=data[1], emplacement='Inconnu')
+    donnees = models.donnees.objects.create(capteur=capteur, date=date, heure=heure, temp=data[4])
     return "ok"
