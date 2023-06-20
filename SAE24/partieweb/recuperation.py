@@ -1,5 +1,5 @@
 import os, json
-from .views import ajoutdonnees
+from . import views
 
 repertoire = './messages'
 
@@ -8,5 +8,5 @@ while True:
         for file in os.listdir(repertoire):
             with open(os.path.join(repertoire, file), 'r') as f:
                 data = json.load(f)
-            ajoutdonnees(data)
+            views.ajoutdonnees(data)
             os.remove(os.path.join(repertoire, file))

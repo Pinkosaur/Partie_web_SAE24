@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from .forms import capteurform
-from . import models
+from . import models, recuperation
 from django.http import HttpResponseRedirect
 # Create your views here.
 
