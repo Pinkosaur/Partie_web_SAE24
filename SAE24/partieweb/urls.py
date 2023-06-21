@@ -11,5 +11,6 @@ urlpatterns = [
     path('delete/<str:id>/', views.delete),
     path('donnees/<str:id>/', views.donnees),
     path('deletedonnee/<int:id>/', views.deletedonnee),
-    path('ajoutdonnees', recuperation.recuperation)
+    path('ajoutdonnees', recuperation.recuperation),
+    path('deleteall/<str:id>/', views.deleteall),
     ]

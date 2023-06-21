@@ -48,7 +48,7 @@ def delete(request, id):
 
 def donnees(request, id):
     liste = models.donnees.objects.filter(capteur_id=id)
-    return render(request, "partieweb/donnees.html", {"liste": liste})
+    return render(request, "partieweb/donnees.html", {"liste": liste, "id":id})
 
 def deletedonnee(request, id):
     suppr = models.donnees.objects.get(pk=id)
@@ -57,14 +57,19 @@ def deletedonnee(request, id):
     liste = models.donnees.objects.filter(capteur_id=idcapteur)
     return render(request, "partieweb/donnees.html", {"liste": liste})
 
+def deleteall(request, id):
+    suppr = models.donnees.objects.filter(capteur_id=id)
+    suppr.delete()
+    return render(request, "partieweb/donnees.html")
 def ajoutdonnees(data): # id, piece, date, heure, temp
     date = data[2].split("/")
     date = f"{date[2]}-{date[1]}-{date[0]}"
     heure =  data[3].split("-")
     heure = f"{heure[0]}:{heure[1]}:{heure[2]}"
+    timestamp = f"{date} {heure}"
     if models.capteur.objects.filter(pk=data[0]).exists():
         capteur = models.capteur.objects.get(pk=data[0])
     else:
-        capteur = models.capteur.objects.create(id=data[0], nom='Nouveau capteur', piece=data[1], emplacement='Inconnu')
-    donnees = models.donnees.objects.create(capteur=capteur, date=date, heure=heure, temp=data[4])
+        capteur = models.capteur.objects.create(id=data[0], nom=f'Capteur {data[1]} {data[0][0]}{data[0][1]}{data[0][2]}', piece=data[1], emplacement='Inconnu')
+    donnees = models.donnees.objects.create(capteur=capteur, timestamp=timestamp, temp=data[4])
     return "ok"

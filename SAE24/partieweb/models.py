@@ -4,7 +4,7 @@ from django.db import models
 
 class capteur(models.Model):
     id = models.CharField(max_length=15, primary_key=True)
-    nom = models.CharField(max_length=40, default = 'Nouveau capteur')
+    nom = models.CharField(max_length=40, unique=True)
     piece = models.CharField(max_length=40)
     emplacement = models.TextField()
     def __str__(self):
@@ -14,10 +14,9 @@ class capteur(models.Model):
 
 class donnees(models.Model):
     capteur = models.ForeignKey('capteur', on_delete=models.CASCADE)
-    date = models.DateField()
-    heure =models.TimeField()
+    timestamp = models.DateTimeField()
     temp = models.FloatField()
     def __str__(self):
-        return f"mesure du {self.date} à {self.heure} : {self.temp}°C"
+        return f"mesure du {self.timestamp} : {self.temp}°C"
     def dic(self):
-        return {"id":self.id, "capteur":self.capteur, "date":self.date, "heure":self.heure, "temp":self.temp}
+        return {"id":self.id, "capteur":self.capteur, "timestamp":self.timestamp, "temp":self.temp}
