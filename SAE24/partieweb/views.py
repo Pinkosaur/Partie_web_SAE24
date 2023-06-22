@@ -47,7 +47,7 @@ def delete(request, id):
     return HttpResponseRedirect("/partieweb/")
 
 def donnees(request, id):
-    liste = models.donnees.objects.filter(capteur_id=id)
+    liste = models.donnees.objects.filter(capteur_id=id).order_by("timestamp")
     return render(request, "partieweb/donnees.html", {"liste": liste, "id":id})
 
 def deletedonnee(request, id):
