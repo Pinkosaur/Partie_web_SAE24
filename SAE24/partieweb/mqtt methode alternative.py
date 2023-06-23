@@ -8,7 +8,7 @@ cache = "./messages/cache.csv"
 def on_connect(client, userdata, flags, rc):
     if rc == 0:
         print("Connexion au broker établie avec succès")
-        client.subscribe("IUT/Colmar2023/SAE2.04/Maison2")
+        client.subscribe("IUT/Colmar2023/SAE2.04/Maison1")
     else:
         print(f"Échec de la connexion au broker. Code de retour : {rc}")
 def on_message(client, userdata, message):
@@ -39,18 +39,11 @@ def on_message(client, userdata, message):
     if connected == True:
         print("Envoi des infos vers le serveur MySQL")
         ajout(data, mydb)
-        df = pd.read_csv(cache)
-        if df.empty == False:
-            print("Ajout des infos du cache dans le serveur MySQL")
-            df = pd.read_csv(cache, header=None)
-            with open(cache, "r+") as f:
-                reader = csv.reader(f)
-                writer = csv.writer(f)
-                for data in reader:
-                    if data != "":
-                        ajout(data, mydb)
-                        writer.writerow("")
-
+        if os.path.exists(cache):
+            with open(cache, "w") as f:
+                for data in cache:
+                    ajout(data, mydb)
+            os.remove(cache)
 
 def ajout(data, mydb):
     query = f"INSERT INTO partieweb_temp (chaine) VALUES ('{data}')"

@@ -22,7 +22,7 @@ def traitement(request):
         return render(request, "partieweb/ajout.html", {"form":form})
 
 def affiche(request, id):
-    capteur = models.capteur.get(pk = id)
+    capteur = models.capteur.objects.get(pk = id)
     return render(request, "partieweb/affiche.html", {'capteur':capteur})
 
 def update(request, id):
@@ -39,7 +39,7 @@ def updatetraitement(request, id):
         capteur.save()
         return HttpResponseRedirect("/partieweb/")
     else:
-        return render(request, "partieweb/update.html", {"form": form})
+        return HttpResponseRedirect(f"/partieweb/update/{saveid}/")
 
 def delete(request, id):
     suppr = models.capteur.objects.get(pk=id)
@@ -64,18 +64,14 @@ def deleteall(request, id):
 def ajoutdonnees(x): # id, piece, date, heure, temp
     donnees = models.temp.objects.all()
     for data in donnees:
-        data = str(data)
-        data = data.split("_")
+        data = str(data).split("(")[1].replace(")", "").split("_")
         heure =  data[3].split(".")
         heure = f"{heure[0]}:{heure[1]}:{heure[2]}"
         timestamp = f"{data[2]} {heure}"
-        if models.capteur.objects.filter(pk=data[0]).exists():
+        if models.capteur.objects.filter(pk=data[0]).exists(  ):
             capteur = models.capteur.objects.get(pk=data[0])
         else:
             capteur = models.capteur.objects.create(id=data[0], nom=f'Capteur {data[1]} {data[0][0]}{data[0][1]}{data[0][2]}', piece=data[1], emplacement='Inconnu')
         donnees = models.donnees.objects.create(capteur=capteur, timestamp=timestamp, temp=data[4])
+    models.temp.objects.all().delete()
     return HttpResponseRedirect("/partieweb/")
-
-def indextemp(request):
-    donnees = models.temp.objects.all()
-    return render(request, "partieweb/index.html", {"liste":donnees})
