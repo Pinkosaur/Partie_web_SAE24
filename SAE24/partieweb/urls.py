@@ -13,4 +13,6 @@ urlpatterns = [
     path('deletedonnee/<int:id>/', views.deletedonnee),
     path('ajoutdonnees', views.ajoutdonnees),
     path('deleteall/<str:id>/', views.deleteall),
-    ]
+    path('indextemp/', views.indextemp),
+
+]

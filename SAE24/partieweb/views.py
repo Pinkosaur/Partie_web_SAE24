@@ -44,6 +44,8 @@ def updatetraitement(request, id):
 def delete(request, id):
     suppr = models.capteur.objects.get(pk=id)
     suppr.delete()
+    suppr2 = models.donnees.objects.filter(capteur_id=id)
+    suppr2.delete()
     return HttpResponseRedirect("/partieweb/")
 
 def donnees(request, id):
@@ -75,3 +77,8 @@ def ajoutdonnees(x): # id, piece, date, heure, temp
         donnees = models.donnees.objects.create(capteur=capteur, timestamp=timestamp, temp=data[4])
     models.temp.objects.all().delete()
     return HttpResponseRedirect("/partieweb/")
+
+
+def indextemp(request):
+    liste = models.temp.objects.all()
+    return render(request, "partieweb/donnees.html", {"liste": liste})

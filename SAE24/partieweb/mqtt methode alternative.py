@@ -21,9 +21,9 @@ def on_message(client, userdata, message):
     print("données reçues :", data)
     try:
         print('Connexion à MySQL')
-        mydb = mysql.connector.connect(host="127.0.0.1",
+        mydb = mysql.connector.connect(host="10.252.10.198",
                                        user="root",
-                                       password="toto",
+                                       password="root",
                                        database="mqtt",
                                        connect_timeout=2
                                        )
