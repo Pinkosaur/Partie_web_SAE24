@@ -20,3 +20,6 @@ class donnees(models.Model):
         return f"mesure du {self.timestamp} : {self.temp}°C"
     def dic(self):
         return {"id":self.id, "capteur":self.capteur, "timestamp":self.timestamp, "temp":self.temp}
+
+class temp(models.Model):
+    chaine = models.CharField(max_length=100, primary_key=True)
