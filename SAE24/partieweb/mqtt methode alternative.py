@@ -1,10 +1,9 @@
 from paho.mqtt import client as mqtt
-import random, os, csv
+import os, csv
 import mysql.connector
-import pandas as pd
 
 
-cache = "./messages/cache.csv"
+cache = []
 def on_connect(client, userdata, flags, rc):
     if rc == 0:
         print("Connexion au broker établie avec succès")
@@ -32,18 +31,15 @@ def on_message(client, userdata, message):
     except:
         print("Connexion à MySQL échouée, ajout des infos au cache")
         connected = False
-        with open(cache, 'a', newline="") as f:
-            writer = csv.writer(f)
-            writer.writerow(data)
+        cache.append(data)
+        print("cache :", cache)
 
     if connected == True:
         print("Envoi des infos vers le serveur MySQL")
         ajout(data, mydb)
-        if os.path.exists(cache):
-            with open(cache, "w") as f:
-                for data in cache:
-                    ajout(data, mydb)
-            os.remove(cache)
+        for data in cache:
+            ajout(data, mydb)
+        cache.clear()
 
 def ajout(data, mydb):
     query = f"INSERT INTO partieweb_temp (chaine) VALUES ('{data}')"
