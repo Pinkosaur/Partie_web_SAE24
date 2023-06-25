@@ -1,7 +1,8 @@
 from django.shortcuts import render
-from .forms import capteurform
+from .forms import capteurform, capteurformupdate
 from . import models
 from django.http import HttpResponseRedirect
+import random
 # Create your views here.
 
 
@@ -27,11 +28,14 @@ def affiche(request, id):
 
 def update(request, id):
     capteur = models.capteur.objects.get(pk=id)
-    form = capteurform(capteur.dic())
+    form = capteurformupdate(capteur.dic())
+    temp = models.capteur.objects.get(pk=id)
+    temp.nom = f"{capteur.nom[0:10]} mise à jour échouée {random.randint(0, 99)}"
+    temp.save()
     return render(request, "partieweb/update.html", {"form":form, "id":id})
 
 def updatetraitement(request, id):
-    form = capteurform(request.POST)
+    form = capteurformupdate(request.POST)
     saveid = id
     if form.is_valid():
         capteur = form.save(commit = False)
@@ -56,14 +60,13 @@ def deletedonnee(request, id):
     suppr = models.donnees.objects.get(pk=id)
     idcapteur = suppr.capteur_id
     suppr.delete()
-    liste = models.donnees.objects.filter(capteur_id=idcapteur)
-    return render(request, "partieweb/donnees.html", {"liste": liste})
+    return HttpResponseRedirect(f"/partieweb/donnees/{idcapteur}/")
 
 def deleteall(request, id):
     suppr = models.donnees.objects.filter(capteur_id=id)
     suppr.delete()
     return render(request, "partieweb/donnees.html")
-def ajoutdonnees(x): # id, piece, date, heure, temp
+def ajoutdonnees(request, id): # id, piece, date, heure, temp
     donnees = models.temp.objects.all()
     for data in donnees:
         data = str(data).split("(")[1].replace(")", "").split("_")
@@ -76,9 +79,8 @@ def ajoutdonnees(x): # id, piece, date, heure, temp
             capteur = models.capteur.objects.create(id=data[0], nom=f'Capteur {data[1]} {data[0][0]}{data[0][1]}{data[0][2]}', piece=data[1], emplacement='Inconnu')
         donnees = models.donnees.objects.create(capteur=capteur, timestamp=timestamp, temp=data[4])
     models.temp.objects.all().delete()
-    return HttpResponseRedirect("/partieweb/")
+    if id == "0":
+        return HttpResponseRedirect("/partieweb/")
+    else:
+        return HttpResponseRedirect(f"/partieweb/donnees/{id}/")
 
-
-def indextemp(request):
-    liste = models.temp.objects.all()
-    return render(request, "partieweb/donnees.html", {"liste": liste})

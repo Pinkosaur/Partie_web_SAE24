@@ -5,7 +5,7 @@
     <title>Title</title>
 </head>
 <body>
-<a href="/partieweb/">Retour</a>{% if liste %} - <a href="/partieweb/deleteall/{{id}}/">Tout supprimer</a>{% endif %}
+<a href="/partieweb/">Retour</a>{% if liste %} - <a href="/partieweb/deleteall/{{id}}/">Tout supprimer</a>{% endif %} - <a href="/partieweb/ajoutdonnees/{{id}}/">Rafraîchir</a>
 <ul>
     {% if liste %}
         {% for l in liste %}

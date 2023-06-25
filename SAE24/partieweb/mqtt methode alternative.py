@@ -1,16 +1,20 @@
 from paho.mqtt import client as mqtt
-import os, csv
-import mysql.connector
+import mysql.connector, json, os
 
+if (not os.path.exists("./messages/cache.json")) or (os.stat("./messages/cache.json").st_size == 0): #!!!!!!!!! chemin !!!!!!!!!
+    f = open("./messages/cache.json", "w") #!!!!!!!!! chemin !!!!!!!!!
+    f.write("[]")
 
-cache = []
 def on_connect(client, userdata, flags, rc):
     if rc == 0:
         print("Connexion au broker établie avec succès")
         client.subscribe("IUT/Colmar2023/SAE2.04/Maison1")
     else:
         print(f"Échec de la connexion au broker. Code de retour : {rc}")
+
+
 def on_message(client, userdata, message):
+    global mydb
     temp = str(message.payload).split('\'')[1].split(',')
     date = temp[2].split('=')[1].split("/")
     date = f"{date[2]}-{date[1]}-{date[0]}"
@@ -20,9 +24,9 @@ def on_message(client, userdata, message):
     print("données reçues :", data)
     try:
         print('Connexion à MySQL')
-        mydb = mysql.connector.connect(host="10.252.10.198",
+        mydb = mysql.connector.connect(host="127.0.0.1",
                                        user="root",
-                                       password="root",
+                                       password="toto",
                                        database="mqtt",
                                        connect_timeout=2
                                        )
@@ -31,26 +35,33 @@ def on_message(client, userdata, message):
     except:
         print("Connexion à MySQL échouée, ajout des infos au cache")
         connected = False
-        cache.append(data)
-        print("cache :", cache)
+        with open("./messages/cache.json", "r") as f: #!!!!!!!!! chemin !!!!!!!!!
+            temp = json.load(f)
+        temp.append(data)
+        with open("./messages/cache.json", "w") as f: #!!!!!!!!! chemin !!!!!!!!!
+            json.dump(temp, f)
+        print("cache :", temp)
 
-    if connected == True:
+    if connected:
         print("Envoi des infos vers le serveur MySQL")
         ajout(data, mydb)
-        for data in cache:
-            ajout(data, mydb)
-        cache.clear()
+        if os.stat("./messages/cache.json").st_size > 8:
+            with open('./messages/cache.json', 'r') as f: #!!!!!!!!! chemin !!!!!!!!!
+                temp = json.load(f)
+            with open('./messages/cache.json', 'w') as f:  # !!!!!!!!! chemin !!!!!!!!!
+                f.write("[]")
+            for data in temp:
+                ajout(data, mydb)
+                print(f"Ajout de {data} depuis le cache")
 
 def ajout(data, mydb):
     query = f"INSERT INTO partieweb_temp (chaine) VALUES ('{data}')"
-    print ("commande :", query)
-    try:
-        curseur = mydb.cursor()
-        curseur.execute(query)
-        mydb.commit()
-        print("commande exécutée")
-    except:
-        print("échec")
+    print("commande :", query)
+    curseur = mydb.cursor()
+    curseur.execute(query)
+    mydb.commit()
+    print("commande exécutée")
+
 
 broker_address = "test.mosquitto.org"
 client_id = "bb43543d-adac-4736-9cac-cba1331053f2"

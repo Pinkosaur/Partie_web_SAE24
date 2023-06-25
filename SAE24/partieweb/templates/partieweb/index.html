@@ -17,9 +17,9 @@
         </li>
         {% endfor %}
     {% else %}
-        <li>La liste est vide, pour le moment.</li>
+        <li>Aucun capteur trouvé. cliquer sur "Rafraîchir" pour les ajouter automatiquement.</li>
     {% endif %}
 </ul>
-<form action="/partieweb/ajoutdonnees"><input type="submit" value="Récupérer les données"></form>
+<a href="/partieweb/ajoutdonnees/0/">Rafraîchir</a>
 </body>
 </html>

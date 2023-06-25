@@ -4,7 +4,7 @@ from django.db import models
 
 class capteur(models.Model):
     id = models.CharField(max_length=15, primary_key=True)
-    nom = models.CharField(max_length=40, unique = True)
+    nom = models.CharField(max_length=50, unique = True)
     piece = models.CharField(max_length=40)
     emplacement = models.TextField()
     def __str__(self):
