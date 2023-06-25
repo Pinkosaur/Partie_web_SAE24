@@ -52,6 +52,10 @@ def delete(request, id):
     suppr2.delete()
     return HttpResponseRedirect("/partieweb/")
 
+def donnees_all(request):
+    liste = models.donnees.objects.all().order_by("timestamp")
+    return render(request, "partieweb/donnees_all.html", {"liste": liste})
+
 def donnees(request, id):
     liste = models.donnees.objects.filter(capteur_id=id).order_by("timestamp")
     return render(request, "partieweb/donnees.html", {"liste": liste, "id":id})
@@ -63,9 +67,14 @@ def deletedonnee(request, id):
     return HttpResponseRedirect(f"/partieweb/donnees/{idcapteur}/")
 
 def deleteall(request, id):
-    suppr = models.donnees.objects.filter(capteur_id=id)
-    suppr.delete()
-    return render(request, "partieweb/donnees.html")
+    if id != "0":
+        suppr = models.donnees.objects.filter(capteur_id=id)
+        suppr.delete()
+        return HttpResponseRedirect(f"/partieweb/donnees/{id}/")
+    else:
+        suppr = models.donnees.objects.all()
+        suppr.delete()
+        return HttpResponseRedirect("/partieweb/donnees_all/")
 def ajoutdonnees(request, id): # id, piece, date, heure, temp
     donnees = models.temp.objects.all()
     for data in donnees:
@@ -76,11 +85,13 @@ def ajoutdonnees(request, id): # id, piece, date, heure, temp
         if models.capteur.objects.filter(pk=data[0]).exists(  ):
             capteur = models.capteur.objects.get(pk=data[0])
         else:
-            capteur = models.capteur.objects.create(id=data[0], nom=f'Capteur {data[1]} {data[0][0]}{data[0][1]}{data[0][2]}', piece=data[1], emplacement='Inconnu')
+            capteur = models.capteur.objects.create(id=data[0], nom=f'Capteur {data[1]} {data[0][0]}{data[0][1]}{data[0][2]}', piece=data[1], emplacement='Non spécifié')
         donnees = models.donnees.objects.create(capteur=capteur, timestamp=timestamp, temp=data[4])
     models.temp.objects.all().delete()
     if id == "0":
         return HttpResponseRedirect("/partieweb/")
+    elif id == "1":
+        return HttpResponseRedirect(f"/partieweb/donnees_all/")
     else:
         return HttpResponseRedirect(f"/partieweb/donnees/{id}/")
 

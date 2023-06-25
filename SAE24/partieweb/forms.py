@@ -16,9 +16,8 @@ class capteurform(ModelForm):
 class capteurformupdate(ModelForm):
     class Meta:
         model = models.capteur
-        fields = ("nom", "piece", "emplacement")
+        fields = ("nom", "emplacement")
         labels = {
             'nom': _('Nom du capteur '),
-            'piece': _('Pièce '),
             'emplacement': _('Emplacement du capteur '),
         }

@@ -13,4 +13,5 @@ urlpatterns = [
     path('deletedonnee/<int:id>/', views.deletedonnee),
     path('ajoutdonnees/<str:id>/', views.ajoutdonnees),
     path('deleteall/<str:id>/', views.deleteall),
+    path('donnees_all/', views.donnees_all),
  ]

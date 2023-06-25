@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<a href="/partieweb/">Retour</a>{% if liste %} - <a href="/partieweb/deleteall/0/">Tout supprimer</a>{% endif %} - <a href="/partieweb/ajoutdonnees/1/">Rafraîchir</a>
+<ul>
+    {% if liste %}
+        {% for l in liste %}
+        <li>{{l}}
+        <a href="/partieweb/deletedonnee/{{l.id}}/">Supprimer</a>
+        </li>
+        {% endfor %}
+    {% else %}
+        <li>La liste est vide, pour le moment.</li>
+    {% endif %}
+</ul>
+</body>
+</html>
