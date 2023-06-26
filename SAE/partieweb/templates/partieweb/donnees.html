@@ -1,15 +1,17 @@
 <!DOCTYPE html>
-<html lang="en">
+{% load static %}
+<html lang="fr">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <link rel="stylesheet" type="text/css" href="{% static 'partieweb/main.css' %}">
+    <title>Données de {{id}}</title>
 </head>
 <body>
-<a href="/partieweb/">Retour</a>{% if queryset %} - <a href="/partieweb/deleteall/{{id}}/">Tout supprimer</a>{% endif %} - <a href="/partieweb/ajoutdonnees/{{id}}/">Rafraîchir</a>
+<a class="navigation" href="/partieweb/">Retour</a>{% if queryset %} <a class="navigation" href="/partieweb/deleteall/{{id}}/">Tout supprimer</a>{% endif %} <a class="navigation"  href="/partieweb/ajoutdonnees/{{id}}/">Rafraîchir</a>
 <p>Données du capteur {{id}}</p>
 <form method="GET" action="/partieweb/donnees_all_filtrees/">
-    <input type="search" name="date_min" placeholder="A partir du : aaaa-mm-jj">{% if date_min_query %} {{date_min_query}}{% endif %}
-    <input type="search" name="date_max" placeholder="Jusqu'au : aaaa-mm-jj">{% if date_max_query %} {{date_max_query}}{% endif %}
+    <input type="search" name="date_min" placeholder="A partir du : aaaa-mm-jj">
+    <input type="search" name="date_max" placeholder="Jusqu'au : aaaa-mm-jj">
     <input type="submit" value="filtrer">
 </form>
 <p>Filtres courants : {% if date_min_query or date_max_query%}{% if date_min_query %}à partir du {{date_min_query}}, {% endif %}{% if date_max_query %}jusqu'au{{date_max_query}}{% endif %}{% else %}aucun{% endif %}</p>

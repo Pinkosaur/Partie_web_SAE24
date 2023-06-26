@@ -1,14 +1,31 @@
 <!DOCTYPE html>
-<html lang="en">
+{% load static %}
+<html lang="fr">
 <head>
     <meta charset="UTF-8">
+    <link rel="stylesheet" type="text/css" href="{% static 'partieweb/main.css' %}">
     <title>Ajout d'un capteur</title>
 </head>
 <body>
 <form method="post" action="/partieweb/traitement">
-{% csrf_token %}
-{{ form.as_ul }}
-<input type="submit" value="envoyer les données"/>
+  {% csrf_token %}
+  <div class="field-container">
+    {{ form.id.label_tag }}
+    {{ form.id }}
+  </div>
+  <div class="field-container">
+    {{ form.nom.label_tag }}
+    {{ form.nom }}
+  </div>
+  <div class="field-container">
+    {{ form.piece.label_tag }}
+    {{ form.piece }}
+  </div>
+  <div class="field-container">
+    {{ form.emplacement.label_tag }}
+    {{ form.emplacement }}
+  </div>
+  <input type="submit" value="envoyer les données">
 </form>
 </body>
 </html>

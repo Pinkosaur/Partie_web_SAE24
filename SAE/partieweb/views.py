@@ -37,9 +37,11 @@ def update(request, id):
 def updatetraitement(request, id):
     form = capteurformupdate(request.POST)
     saveid = id
+    piece = models.capteur.objects.get(pk=id).piece
     if form.is_valid():
         capteur = form.save(commit = False)
         capteur.id = saveid
+        capteur.piece = piece
         capteur.save()
         return HttpResponseRedirect("/partieweb/")
     else:
@@ -96,6 +98,12 @@ def deletedonnee(request, id):
     idcapteur = suppr.capteur_id
     suppr.delete()
     return HttpResponseRedirect(f"/partieweb/donnees/{idcapteur}/")
+
+def deletedonnee_2(request, id):
+    suppr = models.donnees.objects.get(pk=id)
+    suppr.delete()
+    return HttpResponseRedirect(f"/partieweb/donnees_all/")
+
 
 def deleteall(request, id):
     if id != "0":

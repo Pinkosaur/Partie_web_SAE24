@@ -1,11 +1,13 @@
 <!DOCTYPE html>
-<html lang="en">
+{% load static %}
+<html lang="fr">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <link rel="stylesheet" type="text/css" href="{% static 'partieweb/main.css' %}">
+    <title>Toutes les données</title>
 </head>
 <body>
-<a href="/partieweb/">Retour</a>{% if queryset %} - <a href="/partieweb/deleteall/0/">Tout supprimer</a>{% endif %} - <a href="/partieweb/ajoutdonnees/1/">Rafraîchir</a>
+<a class="navigation" href="/partieweb/">Retour</a>{% if queryset %} <a class="navigation" href="/partieweb/deleteall/0/">Tout supprimer</a>{% endif %} <a class="navigation" href="/partieweb/ajoutdonnees/1/">Rafraîchir</a>
 <form method="GET" action="/partieweb/donnees_all_filtrees/">
     <input type="search" name="date_min" placeholder="A partir du : aaaa-mm-jj">{% if date_min_query %} {{date_min_query}}{% endif %}
     <input type="search" name="date_max" placeholder="Jusqu'au : aaaa-mm-jj">{% if date_max_query %} {{date_max_query}}{% endif %}
@@ -27,7 +29,7 @@
         <tr><th>Timestamp</th><th>Capteur</th><th>Température</th><th> </th></tr>
         {% for l in queryset %}
         <tr><td>{{l.timestamp}}</td><td>{{l.capteur.nom}}</td><td>{{l.temp}}</td>
-        <td><a href="/partieweb/deletedonnee/{{l.id}}/">Supprimer</a></td>
+        <td><a href="/partieweb/deletedonnee_2/{{l.id}}/">Supprimer</a></td>
         </tr>
         {% endfor %}
     {% else %}
@@ -36,3 +38,4 @@
 </table>
 </body>
 </html>
+

@@ -1,26 +1,30 @@
 <!DOCTYPE html>
-<html lang="en">
+{% load static %}
+<html lang="fr">
 <head>
     <meta charset="UTF-8">
+    <link rel="stylesheet" type="text/css" href="{% static 'partieweb/main.css' %}">
     <title>Capteurs</title>
 </head>
 <body>
-<a href="/partieweb/ajout/">Ajouter un capteur</a> -
-<a href="/partieweb/donnees_all/">Voir toutes les données</a>
-<ul>
+<a class="navigation" href="/partieweb/ajout/">Ajouter un capteur</a>
+<a class="navigation" href="/partieweb/donnees_all/">Voir toutes les données</a>
+<a class="navigation" href="/partieweb/ajoutdonnees/0/">Rafraîchir</a>
+<table>
     {% if liste %}
+        <tr><th>ID</th><th>Nom</th><th>Pièce</th><th></th><th></th><th></th><th></th></tr>
         {% for l in liste %}
-        <li>{{l}}
-        <a href="/partieweb/affiche/{{l.id}}/">Afficher</a> -
-        <a href="/partieweb/update/{{l.id}}/">Mettre à jour</a> -
-        <a href="/partieweb/delete/{{l.id}}/">Supprimer</a> -
-        <a href="/partieweb/donnees/{{l.id}}/">Données du capteur</a>
-        </li>
+        <tr><td>{{l.id}}</td><td>{{l.nom}}</td><td>{{l.piece}}</td>
+        <td><a href="/partieweb/affiche/{{l.id}}/">Afficher</a></td>
+        <td><a href="/partieweb/update/{{l.id}}/">Mettre à jour</a></td>
+        <td><a href="/partieweb/delete/{{l.id}}/">Supprimer</a></td>
+        <td><a href="/partieweb/donnees/{{l.id}}/">Données du capteur</a></td>
+        </tr>
         {% endfor %}
     {% else %}
-        <li>Aucun capteur trouvé. cliquer sur "Rafraîchir" pour les ajouter automatiquement.</li>
+        <tr><th>Aucun capteur trouvé. cliquer sur "Rafraîchir" pour les ajouter automatiquement.</th></tr>
     {% endif %}
-</ul>
-<a href="/partieweb/ajoutdonnees/0/">Rafraîchir</a>
+</table>
 </body>
 </html>
+

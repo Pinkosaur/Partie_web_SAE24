@@ -1,13 +1,22 @@
 <!DOCTYPE html>
-<html lang="en">
+{% load static %}
+<html lang="fr">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <link rel="stylesheet" type="text/css" href="{% static 'partieweb/main.css' %}">
+    <title>Mise à jour</title>
 </head>
 <body>
-<form method="post" action="/partieweb/updatetraitement/{{id}}/">
+<form class="formulaire" method="post" action="/partieweb/updatetraitement/{{id}}/">
 {% csrf_token %}
-{{ form.as_ul }}
+  <div class="field-container">
+    {{ form.nom.label_tag }}
+    {{ form.nom }}
+  </div>
+    <div class="field-container">
+    {{ form.emplacement.label_tag }}
+    {{ form.emplacement }}
+  </div>
 <input type="submit" value="envoyer les données"/>
 </form>
 </body>

@@ -8,7 +8,7 @@ class capteur(models.Model):
     piece = models.CharField(max_length=40)
     emplacement = models.TextField()
     def __str__(self):
-        return f"capteur {self.id}: {self.nom}, {self.piece}"
+        return f"Capteur {self.id}: {self.nom}, {self.piece}. Emplacement : {self.emplacement}"
     def dic(self):
         return {"nom":self.nom, "piece":self.piece, "emplacement":self.emplacement}
 

@@ -1,11 +1,13 @@
 <!DOCTYPE html>
-<html lang="en">
+{% load static %}
+<html lang="fr">
 <head>
     <meta charset="UTF-8">
+    <link rel="stylesheet" type="text/css" href="{% static 'partieweb/main.css' %}">
     <title>Infos du capteur</title>
 </head>
 <body>
-<p>{{capteur}}</p>
-<a href="/partieweb/">retour</a>
+<a class="navigation" href="/partieweb/">retour</a>
+<p class="affichage">{{capteur}}</p>
 </body>
 </html>
