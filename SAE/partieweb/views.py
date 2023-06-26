@@ -54,19 +54,32 @@ def delete(request, id):
 
 def donnees_all(request):
     qs = models.donnees.objects.all()
+    return render(request, 'partieweb/donnees_all.html', {'queryset':qs})
+def donnees_all_filtrees(request):
+    qs = models.donnees.objects.all()
     nom_query = request.GET.get('name')
     date_min_query = request.GET.get('date_min')
     date_max_query = request.GET.get('date_max')
     id_query = request.GET.get('id')
     if nom_query != '' and nom_query is not None:
-        qs=qs.filter(capteur=models.capteur.objects.get(nom__icontains=nom_query))
+        if models.capteur.objects.filter(nom__icontains=nom_query).exists():
+            qs=qs.filter(capteur=models.capteur.objects.get(nom__icontains=nom_query))
+        else:
+            nom_query += " (n'existe pas, filtre ignoré)"
     if date_min_query != '' and date_min_query is not None:
         qs = qs.filter(timestamp__gte=date_min_query)
     if date_max_query != '' and date_max_query is not None:
         qs = qs.filter(timestamp__lte=date_max_query)
     if id_query != '' and id_query is not None:
         qs = qs.filter(capteur_id=id_query)
-    return render(request, 'partieweb/donnees_all.html', {'queryset':qs})
+    context = {
+        'queryset':qs,
+        'nom_query':nom_query,
+        'date_min_query':date_min_query,
+        'date_max_query':date_max_query,
+        'id_query':id_query,
+    }
+    return render(request, 'partieweb/donnees_all.html', context)
 
 def donnees(request, id):
     qs = models.donnees.objects.filter(capteur_id=id).order_by("timestamp")

@@ -6,23 +6,24 @@
 </head>
 <body>
 <a href="/partieweb/">Retour</a>{% if queryset %} - <a href="/partieweb/deleteall/{{id}}/">Tout supprimer</a>{% endif %} - <a href="/partieweb/ajoutdonnees/{{id}}/">Rafraîchir</a>
-<form method="GET" action=".">
-    <input type="search" name="date_min" placeholder="A partir du : aaaa-mm-jj">
+<p>Données du capteur {{id}}</p>
+<form method="GET" action="/partieweb/donnees_all_filtrees/">
+    <input type="search" name="date_min" placeholder="A partir du : aaaa-mm-jj">{% if date_min_query %} {{date_min_query}}{% endif %}
+    <input type="search" name="date_max" placeholder="Jusqu'au : aaaa-mm-jj">{% if date_max_query %} {{date_max_query}}{% endif %}
+    <input type="submit" value="filtrer">
 </form>
-<form method="GET" action=".">
-    <input type="search" name="date_max" placeholder="Jusqu'au : aaaa-mm-jj">
-</form>
-<p>Cliquer sur "Rafraîchir" pour réinitialiser les filtres.</p>
-<ul>
+<p>Filtres courants : {% if date_min_query or date_max_query%}{% if date_min_query %}à partir du {{date_min_query}}, {% endif %}{% if date_max_query %}jusqu'au{{date_max_query}}{% endif %}{% else %}aucun{% endif %}</p>
+<table>
     {% if queryset %}
+        <tr><th>Timestamp</th>><th>Température</th><th> </th></tr>
         {% for l in queryset %}
-        <li>{{l}}
-        <a href="/partieweb/deletedonnee/{{l.id}}/">Supprimer</a>
-        </li>
+        <tr><td>{{l.timestamp}}</td>><td>{{l.temp}}</td>
+        <td><a href="/partieweb/deletedonnee/{{l.id}}/">Supprimer</a></td>
+        </tr>
         {% endfor %}
     {% else %}
-        <li>La liste est vide, pour le moment.</li>
+        <tr>Aucune donnée pour le moment.</tr>
     {% endif %}
-</ul>
+</table>
 </body>
 </html>
