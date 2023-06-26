@@ -6,6 +6,9 @@
 </head>
 <body>
 <a href="/partieweb/">Retour</a>{% if liste %} - <a href="/partieweb/deleteall/0/">Tout supprimer</a>{% endif %} - <a href="/partieweb/ajoutdonnees/1/">Rafraîchir</a>
+<form method="GET" action=".">
+    <input type="search" name="date" placeholder="">
+</form>
 <ul>
     {% if liste %}
         {% for l in liste %}
