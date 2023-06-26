@@ -7,7 +7,13 @@
 <body>
 <a href="/partieweb/">Retour</a>{% if liste %} - <a href="/partieweb/deleteall/0/">Tout supprimer</a>{% endif %} - <a href="/partieweb/ajoutdonnees/1/">Rafraîchir</a>
 <form method="GET" action=".">
-    <input type="search" name="date" placeholder="">
+    <input type="search" name="date" placeholder="Filtrer par date">
+</form>
+<form method="GET" action=".">
+    <input type="search" name="name" placeholder="Filtrer par nom">
+</form>
+<form method="GET" action=".">
+    <input type="search" name="id" placeholder="Filtrer par ID">
 </form>
 <ul>
     {% if liste %}
