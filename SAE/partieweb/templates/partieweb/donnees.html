@@ -6,9 +6,16 @@
 </head>
 <body>
 <a href="/partieweb/">Retour</a>{% if liste %} - <a href="/partieweb/deleteall/{{id}}/">Tout supprimer</a>{% endif %} - <a href="/partieweb/ajoutdonnees/{{id}}/">Rafraîchir</a>
+<form method="GET" action=".">
+    <input type="search" name="date_min" placeholder="A partir du : aaaa-mm-jj">
+</form>
+<form method="GET" action=".">
+    <input type="search" name="date_max" placeholder="Jusqu'au : aaaa-mm-jj">
+</form>
+<p>Cliquer sur "Rafraîchir" pour réinitialiser les filtres.</p>
 <ul>
-    {% if liste %}
-        {% for l in liste %}
+    {% if queryset %}
+        {% for l in queryset %}
         <li>{{l}}
         <a href="/partieweb/deletedonnee/{{l.id}}/">Supprimer</a>
         </li>

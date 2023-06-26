@@ -53,12 +53,30 @@ def delete(request, id):
     return HttpResponseRedirect("/partieweb/")
 
 def donnees_all(request):
-    liste = models.donnees.objects.all().order_by("timestamp")
-    return render(request, "partieweb/donnees_all.html", {"liste": liste})
+    qs = models.donnees.objects.all()
+    nom_query = request.GET.get('name')
+    date_min_query = request.GET.get('date_min')
+    date_max_query = request.GET.get('date_max')
+    id_query = request.GET.get('id')
+    if nom_query != '' and nom_query is not None:
+        qs=qs.filter(capteur=models.capteur.objects.get(nom__icontains=nom_query))
+    if date_min_query != '' and date_min_query is not None:
+        qs = qs.filter(timestamp__gte=date_min_query)
+    if date_max_query != '' and date_max_query is not None:
+        qs = qs.filter(timestamp__lte=date_max_query)
+    if id_query != '' and id_query is not None:
+        qs = qs.filter(capteur_id=id_query)
+    return render(request, 'partieweb/donnees_all.html', {'queryset':qs})
 
 def donnees(request, id):
-    liste = models.donnees.objects.filter(capteur_id=id).order_by("timestamp")
-    return render(request, "partieweb/donnees.html", {"liste": liste, "id":id})
+    qs = models.donnees.objects.filter(capteur_id=id).order_by("timestamp")
+    date_min_query = request.GET.get('date_min')
+    date_max_query = request.GET.get('date_max')
+    if date_min_query != '' and date_min_query is not None:
+        qs = qs.filter(timestamp__gte=date_min_query)
+    if date_max_query != '' and date_max_query is not None:
+        qs = qs.filter(timestamp__lte=date_max_query)
+    return render(request, "partieweb/donnees.html", {"queryset":qs, "id":id})
 
 def deletedonnee(request, id):
     suppr = models.donnees.objects.get(pk=id)
@@ -75,6 +93,7 @@ def deleteall(request, id):
         suppr = models.donnees.objects.all()
         suppr.delete()
         return HttpResponseRedirect("/partieweb/donnees_all/")
+
 def ajoutdonnees(request, id): # id, piece, date, heure, temp
     donnees = models.temp.objects.all()
     for data in donnees:
@@ -94,4 +113,3 @@ def ajoutdonnees(request, id): # id, piece, date, heure, temp
         return HttpResponseRedirect(f"/partieweb/donnees_all/")
     else:
         return HttpResponseRedirect(f"/partieweb/donnees/{id}/")
-

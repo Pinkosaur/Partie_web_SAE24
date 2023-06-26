@@ -7,17 +7,21 @@
 <body>
 <a href="/partieweb/">Retour</a>{% if liste %} - <a href="/partieweb/deleteall/0/">Tout supprimer</a>{% endif %} - <a href="/partieweb/ajoutdonnees/1/">Rafraîchir</a>
 <form method="GET" action=".">
-    <input type="search" name="date" placeholder="Filtrer par date">
+    <input type="search" name="date_min" placeholder="A partir du : aaaa-mm-jj">
 </form>
 <form method="GET" action=".">
-    <input type="search" name="name" placeholder="Filtrer par nom">
+    <input type="search" name="date_max" placeholder="Jusqu'au : aaaa-mm-jj">
 </form>
 <form method="GET" action=".">
-    <input type="search" name="id" placeholder="Filtrer par ID">
+    <input type="search" name="name" placeholder="Nom contient :">
 </form>
+<form method="GET" action=".">
+    <input type="search" name="id" placeholder="ID du capteur :">
+</form>
+<p>Cliquer sur "Rafraîchir" pour réinitialiser les filtres.</p>
 <ul>
-    {% if liste %}
-        {% for l in liste %}
+    {% if queryset %}
+        {% for l in queryset %}
         <li>{{l}}
         <a href="/partieweb/deletedonnee/{{l.id}}/">Supprimer</a>
         </li>
