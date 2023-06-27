@@ -2,7 +2,7 @@ from django.shortcuts import render
 from .forms import capteurform, capteurformupdate
 from . import models
 from django.http import HttpResponseRedirect
-import random
+import random, pandas as pd, matplotlib.pyplot as plt, datetime
 # Create your views here.
 
 
@@ -85,13 +85,23 @@ def donnees_all_filtrees(request):
 
 def donnees(request, id):
     qs = models.donnees.objects.filter(capteur_id=id).order_by("timestamp")
+    return render(request, "partieweb/donnees.html", {'queryset': qs, 'id':id})
+
+def donnees_filtrees(request, id):
+    qs = models.donnees.objects.filter(capteur_id=id).order_by("timestamp")
     date_min_query = request.GET.get('date_min')
     date_max_query = request.GET.get('date_max')
     if date_min_query != '' and date_min_query is not None:
         qs = qs.filter(timestamp__gte=date_min_query)
     if date_max_query != '' and date_max_query is not None:
         qs = qs.filter(timestamp__lte=date_max_query)
-    return render(request, "partieweb/donnees.html", {"queryset":qs, "id":id})
+    context = {
+        'queryset': qs,
+        'date_min_query': date_min_query,
+        'date_max_query': date_max_query,
+        'id':id,
+    }
+    return render(request, "partieweb/donnees.html", context)
 
 def deletedonnee(request, id):
     suppr = models.donnees.objects.get(pk=id)
@@ -134,3 +144,4 @@ def ajoutdonnees(request, id): # id, piece, date, heure, temp
         return HttpResponseRedirect(f"/partieweb/donnees_all/")
     else:
         return HttpResponseRedirect(f"/partieweb/donnees/{id}/")
+

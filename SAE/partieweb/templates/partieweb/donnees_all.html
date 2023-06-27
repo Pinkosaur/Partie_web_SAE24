@@ -8,11 +8,12 @@
 </head>
 <body>
 <a class="navigation" href="/partieweb/">Retour</a>{% if queryset %} <a class="navigation" href="/partieweb/deleteall/0/">Tout supprimer</a>{% endif %} <a class="navigation" href="/partieweb/ajoutdonnees/1/">Rafraîchir</a>
+{% if date_min_query or date_max_query or nom_query or id_query %}<a class="navigation" href="/partieweb/donnees_all/">Retirer les filtres</a>{% endif %}
 <form method="GET" action="/partieweb/donnees_all_filtrees/">
-    <input type="search" name="date_min" placeholder="A partir du : aaaa-mm-jj">{% if date_min_query %} {{date_min_query}}{% endif %}
-    <input type="search" name="date_max" placeholder="Jusqu'au : aaaa-mm-jj">{% if date_max_query %} {{date_max_query}}{% endif %}
-    <input type="search" name="name" placeholder="Nom du capteur contient :">{% if nom_query %} {{nom_query}}{% endif %}
-    <input type="search" name="id" placeholder="ID du capteur :">{% if id_query %} {{id_query}}{% endif %}
+    <input type="search" name="date_min" placeholder="A partir du : aaaa-mm-jj">
+    <input type="search" name="date_max" placeholder="Jusqu'au : aaaa-mm-jj">
+    <input type="search" name="name" placeholder="Nom du capteur contient :">
+    <input type="search" name="id" placeholder="ID du capteur :">
     <input type="submit" value="filtrer">
 </form>
 <p>Filtres courants :
